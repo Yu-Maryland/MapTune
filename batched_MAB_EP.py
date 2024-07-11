@@ -11,8 +11,8 @@ genlib_origin = sys.argv[-1]
 lib_origin = genlib_origin[:-7] + '.lib'
 design = sys.argv[-2]
 sample_gate = int(sys.argv[-3])
-temp_blif = "/export/mliu9867/LibGame/temp_blifs_" + genlib_origin[:-7] + "/" + design[:-5] + "_temp.blif"
-lib_path = "/export/mliu9867/LibGame/gen_newlibs_" + genlib_origin[:-7] + "/"
+temp_blif = "temp_blifs/" + design[:-5] + "_bs_ep_temp.blif"
+lib_path = "gen_newlibs/"
 
 start=time.time()
 abc_cmd = "read %s;read %s; map -a; write %s; read %s;read -m %s; ps; topo; upsize; dnsize; stime; " % (genlib_origin, design, temp_blif, lib_origin, temp_blif)
@@ -29,17 +29,17 @@ print("Baseline Area:", max_area)
 # Mapper call
 def technology_mapper(genlib_origin, partial_cell_library):
     with open(genlib_origin, 'r') as f:
-        f_lines = [line.strip() for line in f if line.startswith("GATE") and not any(substr in line for substr in ["BUF", "INV", "inv", "buf"])]
-        #f_lines = [line.strip() for line in f if line.startswith("GATE") and not line.startswith("GATE BUF") and not line.startswith("GATE INV") and not line.startswith("GATE sky130_fd_sc_hd__buf") and not line.startswith("GATE sky130_fd_sc_hd__inv") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv")]
+        #f_lines = [line.strip() for line in f if line.startswith("GATE") and not any(substr in line for substr in ["BUF", "INV", "inv", "buf"])]
+        f_lines = [line.strip() for line in f if line.startswith("GATE") and not line.startswith("GATE BUF") and not line.startswith("GATE INV") and not line.startswith("GATE sky130_fd_sc_hd__buf") and not line.startswith("GATE sky130_fd_sc_hd__inv") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv")]
     f.close()
     with open(genlib_origin, 'r') as f:
-        f_keep = [line.strip() for line in f if any(substr in line for substr in ["BUF", "INV", "inv", "buf"])]
-        #f_keep = [line.strip() for line in f if line.startswith("GATE BUF") or line.startswith("GATE INV") or line.startswith("GATE sky130_fd_sc_hd__buf") or line.startswith("GATE sky130_fd_sc_hd__inv") or line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") or line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv") or line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") or line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv")]
+        #f_keep = [line.strip() for line in f if any(substr in line for substr in ["BUF", "INV", "inv", "buf"])]
+        f_keep = [line.strip() for line in f if line.startswith("GATE BUF") or line.startswith("GATE INV") or line.startswith("GATE sky130_fd_sc_hd__buf") or line.startswith("GATE sky130_fd_sc_hd__inv") or line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") or line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv") or line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") or line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv")]
     f.close()
     lines_partial = [f_lines[i] for i in partial_cell_library]
     lines_partial = lines_partial + f_keep
 
-    output_genlib_file = lib_path + design + "_" + str(len(lines_partial)) + "_samplelib.genlib"
+    output_genlib_file = lib_path + design + "_" + str(len(lines_partial)) + "_bs_ep_samplelib.genlib"
     with open(output_genlib_file, 'w') as out_gen:
         for line in lines_partial:
             out_gen.write(line + '\n')
@@ -98,8 +98,8 @@ batch_size = 10
 # Initialization
 num_cells_select = sample_gate
 with open(genlib_origin, 'r') as f:
-        f_lines = [line.strip() for line in f if line.startswith("GATE") and not any(substr in line for substr in ["BUF", "INV", "inv", "buf"])]
-        #f_lines = [line.strip() for line in f if line.startswith("GATE") and not line.startswith("GATE BUF") and not line.startswith("GATE INV") and not line.startswith("GATE sky130_fd_sc_hd__buf") and not line.startswith("GATE sky130_fd_sc_hd__inv") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv")]
+        #f_lines = [line.strip() for line in f if line.startswith("GATE") and not any(substr in line for substr in ["BUF", "INV", "inv", "buf"])]
+        f_lines = [line.strip() for line in f if line.startswith("GATE") and not line.startswith("GATE BUF") and not line.startswith("GATE INV") and not line.startswith("GATE sky130_fd_sc_hd__buf") and not line.startswith("GATE sky130_fd_sc_hd__inv") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv")]
 f.close()
 num_arms=len(f_lines)
 mab = EpsilonGreedyMAB(num_arms, 0.2, sample_gate, batch_size)
@@ -108,7 +108,7 @@ best_result = (float('inf'), float('inf'))
 best_reward = -float('inf')  # Track best reward
 
 # Main Loop
-num_iterations = 1000  
+num_iterations = 100  
 
 for i in range(num_iterations):
     print(f"Batch iteration: {i}")
@@ -133,7 +133,6 @@ for i in range(num_iterations):
 end=time.time()
 runtime=end-start
 
-#print("Best Cells:", best_cells)
 print("Best Delay:", best_result[0])
 print("Best Area:", best_result[1])
 print("Best Reward:", best_reward)

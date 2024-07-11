@@ -11,9 +11,7 @@ genlib_origin = sys.argv[-1]
 lib_origin = genlib_origin[:-7] + '.lib'
 design = sys.argv[-2]
 sample_gate = int(sys.argv[-3])
-#temp_blif = "/export/mliu9867/LibGame/temp_blifs/" + design[:-5] + "_temp.blif"
-temp_blif = "temp_blifs/" + design[:-5] + "_temp.blif"
-#lib_path = "/export/mliu9867/LibGame/gen_newlibs/"
+temp_blif = "temp_blifs/" + design[:-5] + "_ep_temp.blif"
 lib_path = "gen_newlibs/"
 
 start=time.time()
@@ -41,7 +39,7 @@ def technology_mapper(genlib_origin, partial_cell_library):
     lines_partial = [f_lines[i] for i in partial_cell_library]
     lines_partial = lines_partial + f_keep
 
-    output_genlib_file = lib_path + design + "_" + str(len(lines_partial)) + "_samplelib.genlib"
+    output_genlib_file = lib_path + design + "_" + str(len(lines_partial)) + "_ep_samplelib.genlib"
     with open(output_genlib_file, 'w') as out_gen:
         for line in lines_partial:
             out_gen.write(line + '\n')
@@ -99,6 +97,7 @@ class EpsilonGreedyMAB:
 # Initialization
 num_cells_select = sample_gate
 with open(genlib_origin, 'r') as f:
+        # Modify constraints for extra kept gates
         #f_lines = [line.strip() for line in f if line.startswith("GATE") and not any(substr in line for substr in ["BUF", "INV", "inv", "buf"])]
         f_lines = [line.strip() for line in f if line.startswith("GATE") and not line.startswith("GATE BUF") and not line.startswith("GATE INV") and not line.startswith("GATE sky130_fd_sc_hd__buf") and not line.startswith("GATE sky130_fd_sc_hd__inv") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv")]
 f.close()
@@ -121,9 +120,6 @@ for i in range(num_iterations):
       reward = -float('inf') 
   else:
       reward = calculate_reward(max_delay, max_area, delay, area)
-      # Update condition: Check if reward is better    
-  #except Exception: 
-  #    reward = -float('inf')
   if reward > best_reward:
       best_reward = reward
       print("Current best reward: ", best_reward)

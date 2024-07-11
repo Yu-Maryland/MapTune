@@ -7,6 +7,10 @@ import sys
 import random
 from collections import deque
 import time
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import torch.nn.functional as F
 
 class ReplayBuffer:
     def __init__(self, capacity):
@@ -60,21 +64,18 @@ class GateSelectionEnv(gym.Env):
     def technology_mapper(self, partial_cell_library):
         # Read the original library file and filter gates
         with open(self.genlib_origin, 'r') as f:
-            f_lines = [line.strip() for line in f if line.startswith("GATE") and not any(substr in line for substr in ["BUF", "INV", "inv", "buf"])]
-            #f_lines = [line.strip() for line in f if line.startswith("GATE") and not line.startswith("GATE BUF") and not line.startswith("GATE INV") and not line.startswith("GATE sky130_fd_sc_hd__buf") and not line.startswith("GATE sky130_fd_sc_hd__inv") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv")]
+            #f_lines = [line.strip() for line in f if line.startswith("GATE") and not any(substr in line for substr in ["BUF", "INV", "inv", "buf"])]
+            f_lines = [line.strip() for line in f if line.startswith("GATE") and not line.startswith("GATE BUF") and not line.startswith("GATE INV") and not line.startswith("GATE sky130_fd_sc_hd__buf") and not line.startswith("GATE sky130_fd_sc_hd__inv") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv")]
         f.close()
         with open(self.genlib_origin, 'r') as f:
-            f_keep = [line.strip() for line in f if any(substr in line for substr in ["BUF", "INV", "inv", "buf"])]
-            #f_keep = [line.strip() for line in f if line.startswith("GATE BUF") or line.startswith("GATE INV") or line.startswith("GATE sky130_fd_sc_hd__buf") or line.startswith("GATE sky130_fd_sc_hd__inv") or line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") or line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv") or line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") or line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv")]
+            #f_keep = [line.strip() for line in f if any(substr in line for substr in ["BUF", "INV", "inv", "buf"])]
+            f_keep = [line.strip() for line in f if line.startswith("GATE BUF") or line.startswith("GATE INV") or line.startswith("GATE sky130_fd_sc_hd__buf") or line.startswith("GATE sky130_fd_sc_hd__inv") or line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") or line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv") or line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") or line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv")]
         f.close()
 
-        # Generate the partial library for the selected gates
-        #print(len(f_lines))
-        #print(len(partial_cell_library))
         lines_partial = [f_lines[i] for i in partial_cell_library] + f_keep
-        output_genlib_file = self.lib_path + self.design + "_" + str(len(lines_partial)) + "_samplelib.genlib"
+        output_genlib_file = self.lib_path + self.design + "_" + str(len(lines_partial)) + "_dqn_samplelib.genlib"
         lib_origin = self.genlib_origin[:-7] + '.lib'
-        temp_blif = "/export/mliu9867/LibGame/test_dqn_" + self.genlib_origin[:-7] + "/temp_blifs/" + self.design[:-5] + "_temp.blif"
+        temp_blif = "temp_blifs/" + self.design[:-5] + "_dqn_temp.blif"
         with open(output_genlib_file, 'w') as out_gen:
             for line in lines_partial:
                 out_gen.write(line + '\n')
@@ -110,11 +111,6 @@ class GateSelectionEnv(gym.Env):
 
     def close(self):
         pass
-
-import torch
-import torch.nn as nn
-import torch.optim as optim
-import torch.nn.functional as F
 
 class DQNNetwork(nn.Module):
     def __init__(self, state_size, action_size):
@@ -195,16 +191,10 @@ def train_agent(num_episodes, agent, env, batch_size, buffer_size):
 
 genlib_origin = sys.argv[-1]
 lib_origin = genlib_origin[:-7] + '.lib'
-#print(lib_origin)
 design = sys.argv[-2]
 sample_gate = int(sys.argv[-3])
-temp_blif = "/export/mliu9867/LibGame/test_dqn_" + genlib_origin[:-7] + "/temp_blifs/" + design[:-5] + "_temp.blif"
-lib_path = "/export/mliu9867/LibGame/test_dqn_" + genlib_origin[:-7] + "/gen_newlibs/"
-#lib_origin = '7nm.lib'
-
-#genlib_origin = '7nm.genlib'
-#lib_path = 'test_dqn/'
-#design = 'bfly.abc.blif'
+temp_blif = "temp_blifs/" + design[:-5] + "_dqn_temp.blif"
+lib_path = "gen_newlibs/"
 abc_cmd = "read %s;read %s; map -a; write %s; read %s;read -m %s; ps; topo; upsize; dnsize; stime; " % (genlib_origin, design, temp_blif, lib_origin, temp_blif)
 res = subprocess.check_output(('abc', '-c', abc_cmd))
 match_d = re.search(r"Delay\s*=\s*([\d.]+)\s*ps", str(res))
@@ -215,11 +205,10 @@ max_area = float(match_a.group(1))
 print('Baseline Delay: ', max_delay)
 print('Baseline Area: ', max_area)
 with open(genlib_origin, 'r') as f:
-        f_lines = [line.strip() for line in f if line.startswith("GATE") and not any(substr in line for substr in ["BUF", "INV", "inv", "buf"])]
-        #f_lines = [line.strip() for line in f if line.startswith("GATE") and not line.startswith("GATE BUF") and not line.startswith("GATE INV") and not line.startswith("GATE sky130_fd_sc_hd__buf") and not line.startswith("GATE sky130_fd_sc_hd__inv") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv")]
+        #f_lines = [line.strip() for line in f if line.startswith("GATE") and not any(substr in line for substr in ["BUF", "INV", "inv", "buf"])]
+        f_lines = [line.strip() for line in f if line.startswith("GATE") and not line.startswith("GATE BUF") and not line.startswith("GATE INV") and not line.startswith("GATE sky130_fd_sc_hd__buf") and not line.startswith("GATE sky130_fd_sc_hd__inv") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv")]
 f.close()
 total_gates = len(f_lines)
-#sample_gate = 80
 state_size = total_gates
 action_size = total_gates
 num_episodes = 5000
@@ -227,7 +216,6 @@ batch_size = 10
 buffer_size = 10000
 env = GateSelectionEnv(genlib_origin, lib_path, design, total_gates, sample_gate, max_delay, max_area)
 agent = DQNAgent(state_size, action_size)
-#train_agent(num_episodes=100, agent=agent, env=env, sample_gate=sample_gate)
 start=time.time()
 train_agent(num_episodes, agent, env, batch_size, buffer_size)
 end=time.time()

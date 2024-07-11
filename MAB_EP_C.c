@@ -46,9 +46,9 @@ int main(int argc, char *argv[]) {
 
     size_t design_len = strlen(design);
     char temp_blif[1024];
-    snprintf(temp_blif, sizeof(temp_blif), "/export/mliu9867/LibGame/temp_blifs/%.*s_temp.blif", (int)(design_len - 6), design);
+    snprintf(temp_blif, sizeof(temp_blif), "temp_blifs/%.*s_ep_c_temp.blif", (int)(design_len - 5), design);
 
-    char lib_path[] = "/export/mliu9867/LibGame/gen_newlibs/";
+    char lib_path[] = "gen_newlibs/";
 
     char abc_cmd[2048];
     snprintf(abc_cmd, sizeof(abc_cmd),
@@ -58,8 +58,7 @@ int main(int argc, char *argv[]) {
     char cmd[2080];
     snprintf(cmd, sizeof(cmd), "abc -c \"%s\"", abc_cmd);
 
-    // Print the combined command for debugging
-    printf("Combined command: %s\n", cmd);
+    //printf("Combined command: %s\n", cmd);
 
     FILE *fp;
     fp = popen(cmd, "r");
@@ -97,8 +96,7 @@ int main(int argc, char *argv[]) {
     // Null-terminate the captured output
     res[total_len] = '\0';
 
-    // Print the captured output for debugging
-    printf("Captured output:\n%s\n", res);
+    //printf("Captured output:\n%s\n", res);
 
     regex_t regex_d, regex_a;
     regmatch_t match[2];
@@ -131,7 +129,6 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "No match for area\n");
     }
 
-    // Free compiled regular expressions
     regfree(&regex_d);
     regfree(&regex_a);
     free(res);
@@ -139,9 +136,6 @@ int main(int argc, char *argv[]) {
     printf("Baseline Delay: %f\n", max_delay);
     printf("Baseline Area: %f\n", max_area);
 
-    // Additional code for EpsilonGreedyMAB
-
-    // Read the file and count the number of valid lines
     fp = fopen(genlib_origin, "r");
     if (fp == NULL) {
         perror("Error opening file");
@@ -167,7 +161,7 @@ int main(int argc, char *argv[]) {
     double best_reward = -DBL_MAX;  // Track best reward
 
     // Main Loop
-    int num_iterations = 100;
+    int num_iterations = 300;
     for (int i = 0; i < num_iterations; i++) {
         printf("Iteration: %d\n", i);
         int selected_cells[sample_gate];
@@ -312,7 +306,7 @@ Result technology_mapper(const char *genlib_origin, int *partial_cell_library, i
     }
 
     char output_genlib_file[1024];
-    snprintf(output_genlib_file, sizeof(output_genlib_file), "%s%s_%d_samplelib.genlib", lib_path, design, partial_count + f_keep_count);
+    snprintf(output_genlib_file, sizeof(output_genlib_file), "%s%s_%d_ep_c_samplelib.genlib", lib_path, design, partial_count + f_keep_count);
     fp = fopen(output_genlib_file, "w");
     if (fp == NULL) {
         perror("Error opening output file");
