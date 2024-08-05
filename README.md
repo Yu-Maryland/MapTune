@@ -107,7 +107,7 @@ MIT License
 This work is funded by the National Science Foundation (NSF) under awards NSF 2229562, 2349670, 2349461, and 2403134, and University of Maryland.
 
 ## Bibtex
-
+```
 @misc{liu2024maptuneadvancingasictechnology,
       title={MapTune: Advancing ASIC Technology Mapping via Reinforcement Learning Guided Library Tuning}, 
       author={Mingju Liu and Daniel Robinson and Yingjie Li and Cunxi Yu},
@@ -117,5 +117,4 @@ This work is funded by the National Science Foundation (NSF) under awards NSF 22
       primaryClass={cs.AR},
       url={https://arxiv.org/abs/2407.18110}, 
 }
-```
 ```
