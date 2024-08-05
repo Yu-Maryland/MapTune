@@ -4,7 +4,7 @@
 This repository contains the implementation and scripts used for the experiments in the ICCAD'24 paper "MapTune: Advancing ASIC Technology Mapping via Reinforcement Learning Guided Library Tuning". The experiments involve selected real world ISCAS 85/89/99, VTR 8.0, and EPFL designs mapped with four different technology libraries using ABC built-in mapper tuned by our MapTune Framework.
 
 ![Combined Animation](./s838a_65_7nm.gif)
-(This is the visulization of the tuning process of mapping Design s838a.bench using ASAP7 library tuned by `MapTune-ε` (Multi-Armed Bandit with Epsilon Greedy policy) agent mapped with ABC built-in default delay-driven mapper.)
+(This is the visualization of the tuning process of mapping Design s838a.bench using ASAP7 library tuned by `MapTune-ε` (Multi-Armed Bandit with Epsilon Greedy policy) agent mapped with ABC built-in default delay-driven mapper.)
 
 ## Directory Structure
 - `benchmarks`: Contains selected designs from ISCAS 85/89/99, VTR 8.0, and EPFL benchmark suites.
@@ -108,5 +108,14 @@ This work is funded by the National Science Foundation (NSF) under awards NSF 22
 
 ## Bibtex
 
+@misc{liu2024maptuneadvancingasictechnology,
+      title={MapTune: Advancing ASIC Technology Mapping via Reinforcement Learning Guided Library Tuning}, 
+      author={Mingju Liu and Daniel Robinson and Yingjie Li and Cunxi Yu},
+      year={2024},
+      eprint={2407.18110},
+      archivePrefix={arXiv},
+      primaryClass={cs.AR},
+      url={https://arxiv.org/abs/2407.18110}, 
+}
 ```
 ```

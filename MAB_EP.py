@@ -16,7 +16,9 @@ lib_path = "gen_newlibs/"
 
 start=time.time()
 abc_cmd = "read %s;read %s; map; write %s; read %s;read -m %s; ps; topo; upsize; dnsize; stime; " % (genlib_origin, design, temp_blif, lib_origin, temp_blif)
+print(abc_cmd)
 res = subprocess.check_output(('abc', '-c', abc_cmd))
+print(res)
 match_d = re.search(r"Delay\s*=\s*([\d.]+)\s*ps", str(res))
 match_a = re.search(r"Area\s*=\s*([\d.]+)", str(res))
 # Baseline
@@ -102,14 +104,14 @@ with open(genlib_origin, 'r') as f:
         f_lines = [line.strip() for line in f if line.startswith("GATE") and not line.startswith("GATE BUF") and not line.startswith("GATE INV") and not line.startswith("GATE sky130_fd_sc_hd__buf") and not line.startswith("GATE sky130_fd_sc_hd__inv") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__buf") and not line.startswith("GATE gf180mcu_fd_sc_mcu7t5v0__inv")]
 f.close()
 num_arms=len(f_lines)
-print(num_arms)
+#print(num_arms)
 mab = EpsilonGreedyMAB(num_arms, epsilon=0.2, sample_gate=num_cells_select)  
 best_cells = None
 best_result = (float('inf'), float('inf'))  
 best_reward = -float('inf')  # Track best reward
 
 # Main Loop
-num_iterations = 300 
+num_iterations = 100 
 
 for i in range(num_iterations):
   print("Iteration: ", i)
