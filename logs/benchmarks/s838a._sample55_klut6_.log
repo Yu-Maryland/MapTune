@@ -1,0 +1,28 @@
+2024-09-25 22:43:11,611 - INFO - Log file created at: logs/benchmarks/s838a._sample55_klut6_.log
+2024-09-25 22:43:11,611 - INFO - Best cells file created at: logs/benchmarks/s838a._sample55_klut6_best_cells_.log
+2024-09-25 22:43:11,612 - INFO - Starting technology mapping with the following parameters:
+2024-09-25 22:43:11,612 - INFO - Design file: benchmarks/s838a.bench
+2024-09-25 22:43:11,612 - INFO - Genlib file: 7nm.genlib
+2024-09-25 22:43:11,612 - INFO - Sample gate: 55
+2024-09-25 22:43:11,612 - INFO - kLUT: 6
+2024-09-25 22:43:11,612 - INFO - Number of iterations: 2
+2024-09-25 22:43:11,612 - INFO - Batch size: 10
+2024-09-25 22:43:11,612 - INFO - Log directory: logs
+2024-09-25 22:43:11,721 - INFO - Baseline Delay: 4.0
+2024-09-25 22:43:11,721 - INFO - Baseline Area: 77.0
+2024-09-25 22:43:11,721 - INFO - Batch iteration: 0
+2024-09-25 22:43:12,824 - INFO - Current best reward: -0.9736795920896915
+2024-09-25 22:43:12,824 - INFO - Current best result: (4.0, 73.0)
+2024-09-25 22:43:12,824 - INFO - [Iteration 0] Best delay=4.0, area=73.0
+2024-09-25 22:43:12,824 - INFO - Best cells (list of integers) for iteration 0: [0, 128, 130, 3, 132, 133, 2, 134, 8, 137, 136, 11, 19, 20, 22, 25, 28, 29, 30, 31, 35, 38, 42, 44, 47, 48, 50, 51, 57, 59, 62, 65, 72, 76, 82, 85, 87, 91, 93, 95, 97, 98, 100, 101, 103, 105, 106, 109, 111, 114, 115, 117, 119, 124, 127]
+2024-09-25 22:43:12,824 - INFO - Batch iteration: 1
+2024-09-25 22:43:13,922 - INFO - Current best reward: -0.9736795920896915
+2024-09-25 22:43:13,922 - INFO - Current best result: (4.0, 73.0)
+2024-09-25 22:43:13,922 - INFO - [Iteration 1] Best delay=4.0, area=73.0
+2024-09-25 22:43:13,922 - INFO - Best cells (list of integers) for iteration 1: [0, 128, 130, 3, 132, 133, 2, 134, 8, 137, 136, 11, 19, 20, 22, 25, 28, 29, 30, 31, 35, 38, 42, 44, 47, 48, 50, 51, 57, 59, 62, 65, 72, 76, 82, 85, 87, 91, 93, 95, 97, 98, 100, 101, 103, 105, 106, 109, 111, 114, 115, 117, 119, 124, 127]
+2024-09-25 22:43:14,034 - INFO - [Final] Best delay=4.0, area=73.0, Mapped blif saved at best_blifs/benchmarks/s838a._bs_ep_temp_LUT6.blif
+2024-09-25 22:43:14,034 - INFO - Final Best cells (list of integers): [0, 128, 130, 3, 132, 133, 2, 134, 8, 137, 136, 11, 19, 20, 22, 25, 28, 29, 30, 31, 35, 38, 42, 44, 47, 48, 50, 51, 57, 59, 62, 65, 72, 76, 82, 85, 87, 91, 93, 95, 97, 98, 100, 101, 103, 105, 106, 109, 111, 114, 115, 117, 119, 124, 127]
+2024-09-25 22:43:14,034 - INFO - Best Delay: 4.0
+2024-09-25 22:43:14,034 - INFO - Best Area: 73.0
+2024-09-25 22:43:14,034 - INFO - Best Reward: -0.9736795920896915
+2024-09-25 22:43:14,034 - INFO - Total runtime: 2.422274112701416 seconds

@@ -1,0 +1,10 @@
+2024-09-25 22:37:24,720 - INFO - Starting technology mapping with the following parameters:
+2024-09-25 22:37:24,720 - INFO - Design file: benchmarks/s838a.bench
+2024-09-25 22:37:24,720 - INFO - Genlib file: 7nm.genlib
+2024-09-25 22:37:24,720 - INFO - Sample gate: 55
+2024-09-25 22:37:24,720 - INFO - kLUT: 6
+2024-09-25 22:37:24,720 - INFO - Number of iterations: 5
+2024-09-25 22:37:24,720 - INFO - Batch size: 10
+2024-09-25 22:37:24,828 - INFO - Baseline Delay: 4.0
+2024-09-25 22:37:24,828 - INFO - Baseline Area: 77.0
+2024-09-25 22:37:24,828 - INFO - Batch iteration: 0

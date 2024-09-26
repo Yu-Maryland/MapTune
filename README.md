@@ -1,5 +1,13 @@
 # MapTune: Advancing ASIC Technology Mapping via Reinforcement Learning Guided Library Tuning (ICCAD'24)
 
+## Updates for LUT mapping
+
+#### Usage
+```bash
+python batched_MAB_EP_LUT.py benchmarks/s838a.bench 7nm.genlib 55 --klut 6 --num_iterations 5 --batch_size 10
+```
+
+
 ## Overview
 This repository contains the implementation and scripts used for the experiments in the ICCAD'24 paper "MapTune: Advancing ASIC Technology Mapping via Reinforcement Learning Guided Library Tuning". The experiments involve selected real world ISCAS 85/89/99, VTR 8.0, and EPFL designs mapped with four different technology libraries using ABC built-in mapper tuned by our MapTune Framework.
 
