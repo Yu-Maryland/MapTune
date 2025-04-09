@@ -108,13 +108,19 @@ This work is funded by the National Science Foundation (NSF) under awards NSF 22
 
 ## Bibtex
 ```
-@misc{liu2024maptuneadvancingasictechnology,
-      title={MapTune: Advancing ASIC Technology Mapping via Reinforcement Learning Guided Library Tuning}, 
-      author={Mingju Liu and Daniel Robinson and Yingjie Li and Cunxi Yu},
-      year={2024},
-      eprint={2407.18110},
-      archivePrefix={arXiv},
-      primaryClass={cs.AR},
-      url={https://arxiv.org/abs/2407.18110}, 
+@inproceedings{10.1145/3676536.3676762,
+author = {Liu, Mingju and Robinson, Daniel and Li, Yingjie and Yu, Cunxi},
+title = {MapTune: Advancing ASIC Technology Mapping via Reinforcement Learning Guided Library Tuning},
+year = {2025},
+isbn = {9798400710773},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3676536.3676762},
+doi = {10.1145/3676536.3676762},
+booktitle = {Proceedings of the 43rd IEEE/ACM International Conference on Computer-Aided Design},
+articleno = {143},
+numpages = {10},
+location = {Newark Liberty International Airport Marriott, New York, NY, USA},
+series = {ICCAD '24}
 }
 ```
